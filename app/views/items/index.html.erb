@@ -131,7 +131,8 @@
       <%# 商品のインスタンス変数になにか入っている場合、中身のすべてを展開 %>
       <% @items.each do |item| %>
       <li class='list'>
-        <%= link_to item_path(item.id) do %>
+        <%= link_to '#' do %>
+        <%#= link_to item_path(item.id) do %>
         <div class='item-img-content'>
           <% if item.image.attached? %>
             <%= image_tag item.image, class: "item-img" %>
@@ -143,11 +144,11 @@
 
 
           <%# 商品が売れていればsold outを表示 %>
-          <% if item.order.present? %>
+          <%# if item.order.present? %>
             <div class='sold-out'>
               <span>Sold Out!!</span>
             </div>
-          <% end %>
+          <%# end %>
           <%# //商品が売れていればsold outを表示 %>
 
         </div>
