@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_30_042623) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_05_083329) do
   create_table "active_storage_attachments", charset: "utf8", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -52,6 +52,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_30_042623) do
     t.index ["order_id"], name: "index_addresses_on_order_id"
   end
 
+  create_table "item_orders", charset: "utf8", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "address_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["address_id"], name: "index_item_orders_on_address_id"
+    t.index ["item_id"], name: "index_item_orders_on_item_id"
+    t.index ["user_id"], name: "index_item_orders_on_user_id"
+  end
+
   create_table "items", charset: "utf8", force: :cascade do |t|
     t.string "item_name", null: false
     t.text "explanation", null: false
@@ -64,7 +75,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_30_042623) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "image"
     t.index ["user_id"], name: "index_items_on_user_id"
   end
 
@@ -98,6 +108,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_30_042623) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "orders"
+  add_foreign_key "item_orders", "addresses"
+  add_foreign_key "item_orders", "items"
+  add_foreign_key "item_orders", "users"
   add_foreign_key "items", "users"
   add_foreign_key "orders", "items"
   add_foreign_key "orders", "users"
