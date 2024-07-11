@@ -1,8 +1,4 @@
 class ItemOrder < ApplicationRecord
-  #belongs_to :user
-  #belongs_to :item
-  #has_one :address
-
   include ActiveModel::Model
   attr_accessor :token, :post_code, :prefecture_id, :city, :street, :building, :phone_number, :item_id, :user_id
 
