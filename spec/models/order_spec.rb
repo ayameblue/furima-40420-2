@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Order, type: :model do
   before do
-    @item_order = FactoryBot.build(:item_order )
+    @item_order = FactoryBot.build(:item_order)
   end
 
   describe '商品購入情報の保存' do
@@ -87,8 +87,6 @@ RSpec.describe Order, type: :model do
         @item_order.valid?
         expect(@item_order.errors.full_messages).to include("Phone number is invalid")
       end
-
-      
     end
   end
 end
