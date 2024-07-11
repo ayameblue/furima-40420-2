@@ -19,6 +19,8 @@ test:
   host: localhost
   database: furima_40420_2_test
 
+
+
 production:
   <<: *default
   adapter: postgresql

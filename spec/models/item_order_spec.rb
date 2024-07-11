@@ -1,12 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe ItemOrder, type: :model do
+  
   before do
     user = FactoryBot.create(:user)
     item = FactoryBot.create(:item)
-    @item_order = FactoryBot.build(:item_order)
-    @item_order = FactoryBot.build(:item)
-    @item_order = FactoryBot.build(:user)
+    @item_order = FactoryBot.build(:item_order, item_id: item.id, user_id: user.id)
   end
 
   describe '商品購入情報の保存' do
@@ -32,10 +31,28 @@ RSpec.describe ItemOrder, type: :model do
         expect(@item_order.errors.full_messages).to include("Post code can't be blank")
       end
 
+      it '郵便番号は「3桁ハイフン4桁」でなければ保存できない' do
+        @item_order.post_code = '1234567'
+        @item_order.valid?
+        expect(@item_order.errors.full_messages).to include("Post code is invalid")
+      end
+
+      it '郵便番号は全角では保存できない' do
+        @item_order.post_code = '123ー4567'
+        @item_order.valid?
+        expect(@item_order.errors.full_messages).to include("Post code is invalid")
+      end
+
       it '都道府県が空だと保存できない' do
         @item_order.prefecture_id = nil
         @item_order.valid?
         expect(@item_order.errors.full_messages).to include("Prefecture can't be blank")
+      end
+
+      it '都道府県がidが1だと保存できない' do
+        @item_order.prefecture_id = 1
+        @item_order.valid?
+        expect(@item_order.errors.full_messages).to include("Prefecture must be other than 1")
       end
 
       it '市町村が空だと保存できない' do
@@ -56,16 +73,22 @@ RSpec.describe ItemOrder, type: :model do
         expect(@item_order.errors.full_messages).to include("Phone number can't be blank")
       end
 
-      it 'item_idが空だと保存できない' do
-        @item_order.item_id = ''
+      it '電話番号は9桁以下では保存できない' do
+        @item_order.phone_number = '090123456'
         @item_order.valid?
-        expect(@item_order.errors.full_messages).to include("Item can't be blank")
+        expect(@item_order.errors.full_messages).to include("Phone number is invalid")
       end
 
-      it 'user_idが空だと保存できない' do
-        @item_order.user_id = ''
+      it '電話番号は12桁以上では保存できない' do
+        @item_order.phone_number = '090123456789'
         @item_order.valid?
-        expect(@item_order.errors.full_messages).to include("User can't be blank")
+        expect(@item_order.errors.full_messages).to include("Phone number is invalid")
+      end
+
+      it '電話番号は全角だと保存できない' do
+        @item_order.phone_number = '０９０１２３４５６７８'
+        @item_order.valid?
+        expect(@item_order.errors.full_messages).to include("Phone number is invalid")
       end
     end
   end
